@@ -20,7 +20,7 @@ class EventController extends AbstractController
     public function getEventList(EventsRepository $eventRepository, SerializerInterface $serializer): JsonResponse
     {
         $eventList = $eventRepository->findAll();
-        $jsonEventList = $serializer->serialize($eventList, 'json');
+        $jsonEventList = $serializer->serialize($eventList, 'json',['groups' => 'getEvents']);
         return new JsonResponse($jsonEventList, Response::HTTP_OK, [], true);
     }//fin function lister les évènements
 
@@ -29,7 +29,7 @@ class EventController extends AbstractController
     {
         $Event = $EventRepository->find($id);
         if ($Event) {
-            $jsonEvent = $serializer->serialize($Event, 'json');
+            $jsonEvent = $serializer->serialize($Event, 'json', ['groups' => 'getEvents']);
             return new JsonResponse($jsonEvent, Response::HTTP_OK, [], true);
         }
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);

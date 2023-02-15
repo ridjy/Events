@@ -7,15 +7,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Participants;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 class InscriptionController extends AbstractController
 {
     #[Route('/api/insription', name:"createparticipant", methods: ['POST'])]
-    public function createParticipant(Request $request, SerializerInterface $serializer, ManagerRegistry $doctrine, UrlGeneratorInterface $urlGenerator): JsonResponse 
+    public function createParticipant(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator): JsonResponse 
     {
         $Participant = $serializer->deserialize($request->getContent(), Participants::class, 'json');
-        $em = $doctrine->getManager();
         //test si le mail du participant est déjà dans la base de données
         $content = $request->toArray();
         //chercher l'évènement désiré par le nom 
@@ -37,9 +36,6 @@ class InscriptionController extends AbstractController
             //l'évènement n'existe pas
             return new JsonResponse(null, Response::HTTP_NOT_FOUND);
         }
-        
-        $em->persist($Participant);
-        $em->flush();
 
         $jsonParticipant = $serializer->serialize($Participant, 'json', ['groups' => 'getEvents']);
         

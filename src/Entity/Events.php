@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EventsRepository::class)]
 class Events
@@ -14,18 +15,23 @@ class Events
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getEvents"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getEvents"])]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(["getEvents"])]
     private ?\DateTimeInterface $date_debut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(["getEvents"])]
     private ?\DateTimeInterface $date_fin = null;
 
     #[ORM\Column]
+    #[Groups(["getEvents"])]
     private ?int $nbr_max_participants = null;
 
     #[ORM\ManyToMany(targetEntity: Participants::class, mappedBy: 'events_participants')]

@@ -17,11 +17,18 @@ exemple json posté
 "date_fin":"2023-06-03",
 "nbr_max_participants":25
 }
-
+6) modification évènement
+PUT /api/events/{id}
+exemple json posté
+{
+"nbr_max_participants":50
+}
+7) suppression évènement
+DELETE /api/events/{id}
 
 @Todo
 - Ajouter des fixtures
 php bin/console doctrine:fixtures:load
-- Utiliser paramConverter
+- reglage affichage date lors détail évènement
 - migrer vers postgreSQL
 

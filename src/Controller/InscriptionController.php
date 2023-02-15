@@ -6,19 +6,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Participants;
+use App\Entity\Events;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class InscriptionController extends AbstractController
 {
-    #[Route('/api/insription', name:"createparticipant", methods: ['POST'])]
-    public function createParticipant(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator): JsonResponse 
+    #[Route('/api/inscription', name:"createparticipant", methods: ['POST'])]
+    public function createParticipant(Request $request, SerializerInterface $serializer, ManagerRegistry $doctrine, UrlGeneratorInterface $urlGenerator): JsonResponse 
     {
+        $em = $doctrine->getManager();
         $Participant = $serializer->deserialize($request->getContent(), Participants::class, 'json');
         //test si le mail du participant est déjà dans la base de données
         $content = $request->toArray();
         //chercher l'évènement désiré par le nom 
-        $o_eventInscrit = $doctrine->getRepository(Events::class)->findOneBy(array('nom' => $content['nom']));
+        $o_eventInscrit = $doctrine->getRepository(Events::class)->findOneBy(array('nom' => $content['event']));
         if($o_eventInscrit)
         {
             //tester si le participant est déjà dans la base de données
@@ -37,10 +43,10 @@ class InscriptionController extends AbstractController
             return new JsonResponse(null, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonParticipant = $serializer->serialize($Participant, 'json', ['groups' => 'getEvents']);
-        
-        $location = $urlGenerator->generate('detailEvent', ['id' => $Participant->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $jsonEvent = $serializer->serialize($o_eventInscrit, 'json', ['groups' => 'getEvents']);
+        //on affichera l'évènement
+        $location = $urlGenerator->generate('detailEvent', ['id' => $o_eventInscrit->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        return new JsonResponse($jsonParticipant, Response::HTTP_CREATED, ["Location" => $location], true);
+        return new JsonResponse($jsonEvent, Response::HTTP_CREATED, ["Location" => $location], true);
    }//fin function create event
 }

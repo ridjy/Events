@@ -1,6 +1,14 @@
 # Events
 API gestion d'évènements
 
+les routes disponibles :
+events              GET      ANY      ANY    /api/events
+detailEvent         GET      ANY      ANY    /api/events/{id}
+createEvent         POST     ANY      ANY    /api/events
+updateEvent         PUT      ANY      ANY    /api/events/{id}
+deleteEvent         DELETE   ANY      ANY    /api/events/{id}
+createparticipant   POST     ANY      ANY    /api/inscription 
+
 Environnement : 
 Symfony 6.1
 PHP >= 8.0
@@ -48,6 +56,9 @@ l'enregistrement sera toujours unique; cette contrainte est gérée par le SGBDR
 - authentification pour gerer les évènements avec composant security
 composer require security
 - gestion d'erreurs avec Validator
+- rendre l'API autodecouvrable
+- versionner l'API
+- refactoring et mettre en ouevre avec APIplatform 
 - Ajouter des fixtures
 php bin/console doctrine:fixtures:load
 - reglage affichage date lors détail évènement

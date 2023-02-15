@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Events;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Participants;
 
 /**
  * @extends ServiceEntityRepository<Events>
@@ -39,28 +40,18 @@ class EventsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Events[] Returns an array of Events objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return integer Returns le nombre de participants de l'évènement fourni en id
+     */
+    public function countParticipantByEvent($eventId) : int
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->select('COUNT(p.id) as participant_count')
+            ->join('e.participants', 'p')
+            ->where('e.id = :eventId')
+            ->setParameter('eventId', $eventId);
+            //->groupBy('t.id');
 
-//    public function findOneBySomeField($value): ?Events
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

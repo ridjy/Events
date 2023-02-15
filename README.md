@@ -25,8 +25,18 @@ exemple json posté
 }
 7) suppression évènement
 DELETE /api/events/{id}
+8) inscription via le nom d'évènement
+POST /api/inscription
+{
+"nom":"rakotmalala",
+"prenom":"eddy",
+"email":"r.ridjy@gmail.com",
+"telephone":"261335885251",
+"event":"mon évènement"
+}
 
 @Todo
+- gestion d'erreurs
 - Ajouter des fixtures
 php bin/console doctrine:fixtures:load
 - reglage affichage date lors détail évènement

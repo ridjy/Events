@@ -49,6 +49,22 @@ class EventController extends AbstractController
         return new JsonResponse($jsonEvent, Response::HTTP_CREATED, ["Location" => $location], true);
    }//fin function create event
 
+    #[Route('/api/events/{id}', name:"updateEvent", methods:['PUT'])]
+    public function updateEvent(Request $request, SerializerInterface $serializer, Events $currentEvent, ManagerRegistry $doctrine): JsonResponse 
+    {
+        $updatedEvent = $serializer->deserialize($request->getContent(), 
+                Event::class, 
+                'json', 
+                [AbstractNormalizer::OBJECT_TO_POPULATE => $currentEvent]);
+        $em = $doctrine->getManager();
+        $idAuthor = $content['idAuthor'] ?? -1;
+        $updatedEvent->setAuthor($authorRepository->find($idAuthor));
+        
+        $em->persist($updatedEvent);
+        $em->flush();
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
+
    #[Route('/api/events/{id}', name: 'deleteEvent', methods: ['DELETE'])]
     public function deleteEvent(int $id, EventsRepository $EventRepository, ManagerRegistry $doctrine): JsonResponse 
     {

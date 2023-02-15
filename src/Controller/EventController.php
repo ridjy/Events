@@ -52,13 +52,13 @@ class EventController extends AbstractController
     #[Route('/api/events/{id}', name:"updateEvent", methods:['PUT'])]
     public function updateEvent(Request $request, SerializerInterface $serializer, Events $currentEvent, ManagerRegistry $doctrine): JsonResponse 
     {
+        /*$em = $doctrine->getManager();
+        $Event = $EventRepository->find($id);*/
         $updatedEvent = $serializer->deserialize($request->getContent(), 
                 Event::class, 
                 'json', 
                 [AbstractNormalizer::OBJECT_TO_POPULATE => $currentEvent]);
         $em = $doctrine->getManager();
-        $idAuthor = $content['idAuthor'] ?? -1;
-        $updatedEvent->setAuthor($authorRepository->find($idAuthor));
         
         $em->persist($updatedEvent);
         $em->flush();

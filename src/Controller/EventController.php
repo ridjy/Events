@@ -47,7 +47,7 @@ class EventController extends AbstractController
         $location = $urlGenerator->generate('detailEvent', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return new JsonResponse($jsonEvent, Response::HTTP_CREATED, ["Location" => $location], true);
-   }
+   }//fin function create event
 
    #[Route('/api/events/{id}', name: 'deleteEvent', methods: ['DELETE'])]
     public function deleteEvent(int $id, EventsRepository $EventRepository, ManagerRegistry $doctrine): JsonResponse 

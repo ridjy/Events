@@ -11,6 +11,7 @@ use App\Repository\EventsRepository;
 use App\Entity\Events;
 use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class EventController extends AbstractController
@@ -52,8 +53,6 @@ class EventController extends AbstractController
     #[Route('/api/events/{id}', name:"updateEvent", methods:['PUT'])]
     public function updateEvent(Request $request, SerializerInterface $serializer, Events $currentEvent, ManagerRegistry $doctrine): JsonResponse 
     {
-        /*$em = $doctrine->getManager();
-        $Event = $EventRepository->find($id);*/
         $updatedEvent = $serializer->deserialize($request->getContent(), 
                 Event::class, 
                 'json', 

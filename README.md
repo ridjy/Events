@@ -45,6 +45,8 @@ Contraintes :
 l'enregistrement sera toujours unique; cette contrainte est gérée par le SGBDR
 
 @Todo
+- authentification pour gerer les évènements avec composant security
+composer require security
 - gestion d'erreurs avec Validator
 - Ajouter des fixtures
 php bin/console doctrine:fixtures:load

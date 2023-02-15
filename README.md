@@ -1,6 +1,11 @@
 # Events
 API gestion d'évènements
 
+Environnement : 
+Symfony 6.1
+PHP >= 8.0
+Mysql 5 or PostgreSQL 13
+
 1) cloner ce repository
 2) composer install (il faut composer à jour et tournant sous PHP8 )
 3) configuration de l'accès base de données dans .env
@@ -35,10 +40,14 @@ POST /api/inscription
 "event":"mon évènement"
 }
 
+Contraintes : 
+- même si l'utilisateur s'inscrit plusieurs fois à un même évènement, 
+l'enregistrement sera toujours unique; cette contrainte est gérée par le SGBDR
+
 @Todo
-- gestion d'erreurs
+- gestion d'erreurs avec Validator
 - Ajouter des fixtures
 php bin/console doctrine:fixtures:load
 - reglage affichage date lors détail évènement
-- migrer vers postgreSQL
+
 

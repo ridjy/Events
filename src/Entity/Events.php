@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventsRepository::class)]
 class Events
@@ -19,7 +20,8 @@ class Events
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["getEvents"])]
+    #[Groups(["getEvents", "getParticipants"])]
+    #[Assert\NotBlank(message: "Le nom de l'évènement est obligatoire")]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

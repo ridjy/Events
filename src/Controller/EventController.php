@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EventController extends AbstractController
 {
@@ -36,9 +37,17 @@ class EventController extends AbstractController
    }//fin function affichage détail évènement
 
    #[Route('/api/events', name:"createEvent", methods: ['POST'])]
-    public function createEvent(Request $request, SerializerInterface $serializer, ManagerRegistry $doctrine, UrlGeneratorInterface $urlGenerator): JsonResponse 
+    public function createEvent(Request $request, SerializerInterface $serializer, ManagerRegistry $doctrine, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse 
     {
         $Event = $serializer->deserialize($request->getContent(), Events::class, 'json');
+
+        // On vérifie les erreurs
+        $errors = $validator->validate($Event);
+
+        if ($errors->count() > 0) {
+            return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST, [], true);
+        }
+
         $em = $doctrine->getManager();
         $em->persist($Event);
         $em->flush();

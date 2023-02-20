@@ -60,8 +60,7 @@ Contraintes :
 
 - authentification pour gerer les évènements avec composant security
   composer require security
-- gestion d'erreurs avec Validator
-- rendre l'API autodecouvrable
+- cache et pagination
 - versionner l'API
 - refactoring et mettre en ouevre avec APIplatform
 - Ajouter des fixtures

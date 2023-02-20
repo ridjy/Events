@@ -73,6 +73,10 @@ class Events
     #[ORM\ManyToMany(targetEntity: Participants::class, mappedBy: 'events_participants')]
     private Collection $participants;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(["getEvents"])]
+    private ?string $commentaire = null;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -154,6 +158,18 @@ class Events
         if ($this->participants->removeElement($participant)) {
             $participant->removeEventsParticipant($this);
         }
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): self
+    {
+        $this->commentaire = $commentaire;
 
         return $this;
     }

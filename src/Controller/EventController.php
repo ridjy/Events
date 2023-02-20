@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\SerializerInterface as modifSerializer;
 
 class EventController extends AbstractController
 {
@@ -63,12 +64,18 @@ class EventController extends AbstractController
    }//fin function create event
 
     #[Route('/api/events/{id}', name:"updateEvent", methods:['PUT'])]
-    public function updateEvent(Request $request, SerializerInterface $serializer, Events $currentEvent, ManagerRegistry $doctrine): JsonResponse 
+    public function updateEvent(Request $request, modifSerializer $serializer, Events $currentEvent, ManagerRegistry $doctrine, ValidatorInterface $validator): JsonResponse 
     {
         $updatedEvent = $serializer->deserialize($request->getContent(), 
                 Events::class, 
                 'json', 
                 [AbstractNormalizer::OBJECT_TO_POPULATE => $currentEvent]);
+        // On vérifie les erreurs
+        $errors = $validator->validate($updatedEvent);
+        if ($errors->count() > 0) {
+            return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST, [], true);
+        }
+
         $em = $doctrine->getManager();
         $em->persist($updatedEvent);
         $em->flush();

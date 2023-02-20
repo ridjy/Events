@@ -21,9 +21,11 @@ use App\Service\VersioningService;
 class EventController extends AbstractController
 {
     #[Route('/api/events', name: 'events', methods: ['GET'])]
-    public function getEventList(EventsRepository $eventRepository, SerializerInterface $serializer): JsonResponse
+    public function getEventList(EventsRepository $eventRepository, SerializerInterface $serializer, Request $request): JsonResponse
     {
-        $eventList = $eventRepository->findAll();
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 3);
+        $eventList = $eventRepository->findAllWithPagination($page, $limit);
         $context = SerializationContext::create()->setGroups(['getEvents']);
         $jsonEventList = $serializer->serialize($eventList, 'json',$context);
         return new JsonResponse($jsonEventList, Response::HTTP_OK, [], true);

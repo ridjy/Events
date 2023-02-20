@@ -10,7 +10,39 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation\Groups;
+use Hateoas\Configuration\Annotation as Hateoas;
 
+/**
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "detailEvent",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups="getEvents")
+ * )
+ *
+ */
+/*
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "deleteEvent",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups="getEvents")
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "update",
+ *      href = @Hateoas\Route(
+ *          "updateEvent",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups="getEvents")
+ * )
+ *
+ */
 #[ORM\Entity(repositoryClass: EventsRepository::class)]
 #[UniqueEntity('nom')]
 class Events

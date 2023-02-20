@@ -9,11 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\EventsRepository;
 use App\Entity\Events;
-use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\SerializerInterface;
 
 class EventController extends AbstractController
 {
@@ -21,7 +22,8 @@ class EventController extends AbstractController
     public function getEventList(EventsRepository $eventRepository, SerializerInterface $serializer): JsonResponse
     {
         $eventList = $eventRepository->findAll();
-        $jsonEventList = $serializer->serialize($eventList, 'json',['groups' => 'getEvents']);
+        $context = SerializationContext::create()->setGroups(['getEvents']);
+        $jsonEventList = $serializer->serialize($eventList, 'json',$context);
         return new JsonResponse($jsonEventList, Response::HTTP_OK, [], true);
     }//fin function lister les évènements
 
@@ -30,7 +32,8 @@ class EventController extends AbstractController
     {
         $Event = $EventRepository->find($id);
         if ($Event) {
-            $jsonEvent = $serializer->serialize($Event, 'json', ['groups' => 'getEvents']);
+            $context = SerializationContext::create()->setGroups(['getEvents']);
+            $jsonEvent = $serializer->serialize($Event, 'json', $context);
             return new JsonResponse($jsonEvent, Response::HTTP_OK, [], true);
         }
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
@@ -52,8 +55,8 @@ class EventController extends AbstractController
         $em->persist($Event);
         $em->flush();
 
-        $jsonEvent = $serializer->serialize($Event, 'json', ['groups' => 'getEvents']);
-        
+        $context = SerializationContext::create()->setGroups(['getEvents']);
+        $jsonEvent = $serializer->serialize($Event, 'json', $context);
         $location = $urlGenerator->generate('detailEvent', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return new JsonResponse($jsonEvent, Response::HTTP_CREATED, ["Location" => $location], true);

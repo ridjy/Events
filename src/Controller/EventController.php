@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\SerializerInterface as modifSerializer;
+use App\Service\VersioningService;
 
 class EventController extends AbstractController
 {
@@ -29,15 +30,13 @@ class EventController extends AbstractController
     }//fin function lister les évènements
 
     #[Route('/api/events/{id}', name: 'detailEvent', methods: ['GET'])]
-    public function getDetailEvent(int $id, SerializerInterface $serializer, EventsRepository $EventRepository): JsonResponse 
+    public function getDetailEvent(Events $Event, SerializerInterface $serializer, VersioningService $versioningService): JsonResponse 
     {
-        $Event = $EventRepository->find($id);
-        if ($Event) {
-            $context = SerializationContext::create()->setGroups(['getEvents']);
-            $jsonEvent = $serializer->serialize($Event, 'json', $context);
-            return new JsonResponse($jsonEvent, Response::HTTP_OK, [], true);
-        }
-        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+        $version = $versioningService->getVersion();
+        $context = SerializationContext::create()->setGroups(['getEvents']);
+        $context->setVersion($version);
+        $jsonEvent = $serializer->serialize($Event, 'json', $context);
+        return new JsonResponse($jsonEvent, Response::HTTP_OK, [], true);
    }//fin function affichage détail évènement
 
    #[Route('/api/events', name:"createEvent", methods: ['POST'])]

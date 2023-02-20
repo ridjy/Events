@@ -50,6 +50,9 @@ Mysql 5 or PostgreSQL 13
    "telephone":"261335885251",
    "event":"mon évènement"
    }
+9. détail d'un évènement
+   GET /api/events/{id}
+   Headers Accept=application/json:version=2.0
 
 Contraintes :
 
@@ -61,7 +64,6 @@ Contraintes :
 - authentification pour gerer les évènements avec composant security
   composer require security
 - cache et pagination
-- versionner l'API
 - refactoring et mettre en ouevre avec APIplatform
 - Ajouter des fixtures
   php bin/console doctrine:fixtures:load

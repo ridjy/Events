@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation\Groups;
 use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation\Since;
 
 /**
  * @Hateoas\Relation(
@@ -75,6 +76,7 @@ class Events
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(["getEvents"])]
+    #[Since("2.0")]
     private ?string $commentaire = null;
 
     public function __construct()

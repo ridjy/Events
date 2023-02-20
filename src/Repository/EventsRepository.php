@@ -60,7 +60,10 @@ class EventsRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('b')
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
-        return $qb->getQuery()->getResult();
+        $query = $qb->getQuery();
+        //fetch eager lazyloading pour liaison
+        //$query->setFetchMode(Events::class, "participans", \Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER);
+        return $query->getResult();
     }
 
 }

@@ -17,17 +17,23 @@ use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\SerializerInterface as modifSerializer;
 use App\Service\VersioningService;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 class EventController extends AbstractController
 {
     #[Route('/api/events', name: 'events', methods: ['GET'])]
-    public function getEventList(EventsRepository $eventRepository, SerializerInterface $serializer, Request $request): JsonResponse
+    public function getEventList(EventsRepository $eventRepository, SerializerInterface $serializer, Request $request, TagAwareCacheInterface $cachePool): JsonResponse
     {
         $page = $request->get('page', 1);
         $limit = $request->get('limit', 3);
-        $eventList = $eventRepository->findAllWithPagination($page, $limit);
+        $idCache = "getAllBooks-" . $page . "-" . $limit;
         $context = SerializationContext::create()->setGroups(['getEvents']);
-        $jsonEventList = $serializer->serialize($eventList, 'json',$context);
+        $jsonEventList = $cachePool->get($idCache, function (ItemInterface $item) use ($eventRepository, $page, $limit, $context,$serializer) {
+            $item->tag("booksCache");
+            $eventList = $eventRepository->findAllWithPagination($page, $limit);
+            return $serializer->serialize($eventList, 'json',$context);
+        });
         return new JsonResponse($jsonEventList, Response::HTTP_OK, [], true);
     }//fin function lister les évènements
 

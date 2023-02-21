@@ -63,7 +63,6 @@ Contraintes :
 
 - authentification pour gerer les évènements avec composant security
   composer require security
-- cache et pagination
 - refactoring et mettre en ouevre avec APIplatform
 - Ajouter des fixtures
   php bin/console doctrine:fixtures:load

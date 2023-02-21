@@ -13,7 +13,7 @@ createparticipant POST ANY ANY /api/inscription
 Environnement :
 Symfony 6.1
 PHP >= 8.0
-Mysql 5 or PostgreSQL 13
+Mysql 5 or PostgreSQL > 11
 
 1. cloner ce repository
 2. composer install (il faut composer à jour et tournant sous PHP8 )
@@ -24,7 +24,9 @@ Mysql 5 or PostgreSQL 13
   php bin/console doctrine:schema:update --force
 
 4. lancer l'application dans un serveur ou à l'aide de symfoony CLI
-5. créer un évènement
+5. Créer automatiquement des données test pour la base de données acvec la cmd suivante :
+   php bin/console doctrine:fixtures:load
+6. créer un évènement
    url POST /api/events
    exemple json posté
    {
@@ -33,15 +35,15 @@ Mysql 5 or PostgreSQL 13
    "date_fin":"2023-06-03T00:00:00+00:00",
    "nbr_max_participants":25
    }
-6. modification évènement
+7. modification évènement
    PUT /api/events/{id}
    exemple json posté
    {
    "nbr_max_participants":50
    }
-7. suppression évènement
+8. suppression évènement
    DELETE /api/events/{id}
-8. inscription via le nom d'évènement
+9. inscription via le nom d'évènement
    POST /api/inscription
    {
    "nom":"rakotmalala",
@@ -50,9 +52,9 @@ Mysql 5 or PostgreSQL 13
    "telephone":"261335885251",
    "event":"mon évènement"
    }
-9. détail d'un évènement
-   GET /api/events/{id}
-   Headers Accept=application/json:version=2.0
+10. détail d'un évènement
+    GET /api/events/{id}
+    Headers Accept=application/json:version=2.0
 
 Contraintes :
 
@@ -63,7 +65,5 @@ Contraintes :
 
 - authentification pour gerer les évènements avec composant security
   composer require security
-- refactoring et mettre en ouevre avec APIplatform
-- Ajouter des fixtures
-  php bin/console doctrine:fixtures:load
+- refactoring et mettre en oeuvre avec APIplatform
 - reglage affichage date lors détail évènement

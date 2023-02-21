@@ -4,11 +4,18 @@ namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use App\Entity\User;
 use App\Entity\Events;
 use App\Entity\Participants;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private $userPasswordHasher;
+    public function __construct(UserPasswordHasherInterface $userPasswordHasher)
+    {
+        $this->userPasswordHasher = $userPasswordHasher;
+    }
     public function load(ObjectManager $manager): void
     {
         // création de 20 évènements
@@ -36,6 +43,20 @@ class AppFixtures extends Fixture
             $participant->addEventsParticipant($event);
             $manager->persist($participant);
         }
+
+        // Création d'un user "normal"
+        $user = new User();
+        $user->setUsername("user");
+        $user->setRoles(["ROLE_USER"]);
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
+        $manager->persist($user);
+        
+        // Création d'un user admin
+        $userAdmin = new User();
+        $userAdmin->setUsername("admin");
+        $userAdmin->setRoles(["ROLE_ADMIN"]);
+        $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
+        $manager->persist($userAdmin);
         
         $manager->flush();
     }

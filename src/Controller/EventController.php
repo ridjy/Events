@@ -30,7 +30,7 @@ class EventController extends AbstractController
         $idCache = "getAllBooks-" . $page . "-" . $limit;
         $context = SerializationContext::create()->setGroups(['getEvents']);
         $jsonEventList = $cachePool->get($idCache, function (ItemInterface $item) use ($eventRepository, $page, $limit, $context,$serializer) {
-            $item->tag("booksCache");
+            $item->tag("eventsCache");
             $eventList = $eventRepository->findAllWithPagination($page, $limit);
             return $serializer->serialize($eventList, 'json',$context);
         });
@@ -90,8 +90,9 @@ class EventController extends AbstractController
     }
 
    #[Route('/api/events/{id}', name: 'deleteEvent', methods: ['DELETE'])]
-    public function deleteEvent(int $id, EventsRepository $EventRepository, ManagerRegistry $doctrine): JsonResponse 
+    public function deleteEvent(int $id, EventsRepository $EventRepository, ManagerRegistry $doctrine,TagAwareCacheInterface $cachePool): JsonResponse 
     {
+        $cachePool->invalidateTags(["eventsCache"]);
         $em = $doctrine->getManager();
         $Event = $EventRepository->find($id);
         $em->remove($Event);

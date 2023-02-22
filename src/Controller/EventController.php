@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface as modifSerializer;
 use App\Service\VersioningService;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class EventController extends AbstractController
 {
@@ -48,6 +49,7 @@ class EventController extends AbstractController
    }//fin function affichage détail évènement
 
    #[Route('/api/events', name:"createEvent", methods: ['POST'])]
+   #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour créer un évènement')]
     public function createEvent(Request $request, SerializerInterface $serializer, ManagerRegistry $doctrine, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse 
     {
         $Event = $serializer->deserialize($request->getContent(), Events::class, 'json');
@@ -90,6 +92,7 @@ class EventController extends AbstractController
     }
 
    #[Route('/api/events/{id}', name: 'deleteEvent', methods: ['DELETE'])]
+   #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour supprimer un évènement')]
     public function deleteEvent(int $id, EventsRepository $EventRepository, ManagerRegistry $doctrine,TagAwareCacheInterface $cachePool): JsonResponse 
     {
         $cachePool->invalidateTags(["eventsCache"]);

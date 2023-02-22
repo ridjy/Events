@@ -81,6 +81,7 @@ Contraintes :
 - même si l'utilisateur s'inscrit plusieurs fois à un même évènement,
   l'enregistrement sera toujours unique; cette contrainte est gérée par le SGBDR
 - après l'étape 11, il faut ajouter un header 'Authorization' puis valeur 'bearer {le token}
+- seul un utilisateur adlin peut créer des évènements
 
 @Todo
 

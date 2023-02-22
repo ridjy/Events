@@ -85,7 +85,6 @@ Contraintes :
 
 @Todo
 
-- authentification pour gerer les évènements avec composant security
-  composer require security
+- documentation avec Nelmio
 - refactoring et mettre en oeuvre avec APIplatform
 - reglage affichage date lors détail évènement

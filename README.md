@@ -73,12 +73,14 @@ Mysql 5 or PostgreSQL > 11
     "username":"user",
     "password":"password"
     }
-    on obtiendra un token enretour
+    on obtiendra un token en retour
 
 Contraintes :
 
+- l'accès aux évènements (CRUD) est maintenant géré par authentification, l'inscription est cependant ouvert sans authentification
 - même si l'utilisateur s'inscrit plusieurs fois à un même évènement,
   l'enregistrement sera toujours unique; cette contrainte est gérée par le SGBDR
+- après l'étape 11, il faut ajouter un header 'Authorization' puis valeur 'bearer {le token}
 
 @Todo
 

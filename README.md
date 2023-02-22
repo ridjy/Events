@@ -23,38 +23,57 @@ Mysql 5 or PostgreSQL > 11
   php bin/console doctrine:database:create
   php bin/console doctrine:schema:update --force
 
-4. lancer l'application dans un serveur ou à l'aide de symfoony CLI
-5. Créer automatiquement des données test pour la base de données acvec la cmd suivante :
-   php bin/console doctrine:fixtures:load
-6. créer un évènement
-   url POST /api/events
-   exemple json posté
-   {
-   "nom":"mon évènement",
-   "date_debut":"2023-06-03T00:00:00+00:00",
-   "date_fin":"2023-06-03T00:00:00+00:00",
-   "nbr_max_participants":25
-   }
-7. modification évènement
-   PUT /api/events/{id}
-   exemple json posté
-   {
-   "nbr_max_participants":50
-   }
-8. suppression évènement
-   DELETE /api/events/{id}
-9. inscription via le nom d'évènement
-   POST /api/inscription
-   {
-   "nom":"rakotmalala",
-   "prenom":"eddy",
-   "email":"r.ridjy@gmail.com",
-   "telephone":"261335885251",
-   "event":"mon évènement"
-   }
+4.  lancer l'application dans un serveur ou à l'aide de symfoony CLI
+5.  Créer automatiquement des données test pour la base de données acvec la cmd suivante :
+    php bin/console doctrine:fixtures:load
+6.  créer un évènement
+    url POST /api/events
+    exemple json posté
+    {
+    "nom":"mon évènement",
+    "date_debut":"2023-06-03T00:00:00+00:00",
+    "date_fin":"2023-06-03T00:00:00+00:00",
+    "nbr_max_participants":25
+    }
+7.  modification évènement
+    PUT /api/events/{id}
+    exemple json posté
+    {
+    "nbr_max_participants":50
+    }
+8.  suppression évènement
+    DELETE /api/events/{id}
+9.  inscription via le nom d'évènement
+    POST /api/inscription
+    {
+    "nom":"rakotmalala",
+    "prenom":"eddy",
+    "email":"r.ridjy@gmail.com",
+    "telephone":"261335885251",
+    "event":"mon évènement"
+    }
 10. détail d'un évènement
     GET /api/events/{id}
     Headers Accept=application/json:version=2.0
+11. utilisation du jwt
+    creer le dossier /config/jwt/
+    openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+    openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
+    creer le fichier .env.local
+    ###> lexik/jwt-authentication-bundle ###
+
+        JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+        JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+        JWT_PASSPHRASE={votre passphrase tapé lors de la cmd creation du clé}
+
+        ###< lexik/jwt-authentication-bundle ###
+
+    /api/login_check POST header Content-Type:application/json
+    {
+    "username":"user",
+    "password":"password"
+    }
+    on obtiendra un token enretour
 
 Contraintes :
 

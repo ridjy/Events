@@ -75,6 +75,9 @@ Mysql 5 or PostgreSQL > 11
     }
     on obtiendra un token en retour
 
+12. doc dispo à l'adresse web
+    http://127.0.0.1:8000/api/doc
+
 Contraintes :
 
 - l'accès aux évènements (CRUD) est maintenant géré par authentification, l'inscription est cependant ouvert sans authentification

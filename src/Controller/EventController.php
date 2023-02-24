@@ -20,15 +20,49 @@ use App\Service\VersioningService;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 
 class EventController extends AbstractController
 {
+    /**
+     * Cette méthode permet de récupérer l'ensemble des évènements.
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Retourne la liste des évènements",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Events::class, groups={"getEvents"}))
+     *     )
+     * )
+     * @OA\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="La page que l'on veut récupérer",
+     *     @OA\Schema(type="int")
+     * )
+     *
+     * @OA\Parameter(
+     *     name="limit",
+     *     in="query",
+     *     description="Le nombre d'éléments que l'on veut récupérer",
+     *     @OA\Schema(type="int")
+     * )
+     * @OA\Tag(name="Events")
+     *
+     * @param EventsRepository $eventRepository
+     * @param SerializerInterface $serializer
+     * @param Request $request
+     * @return JsonResponse
+     */
     #[Route('/api/events', name: 'events', methods: ['GET'])]
     public function getEventList(EventsRepository $eventRepository, SerializerInterface $serializer, Request $request, TagAwareCacheInterface $cachePool): JsonResponse
     {
         $page = $request->get('page', 1);
         $limit = $request->get('limit', 3);
-        $idCache = "getAllBooks-" . $page . "-" . $limit;
+        $idCache = "getAllEvents-" . $page . "-" . $limit;
         $context = SerializationContext::create()->setGroups(['getEvents']);
         $jsonEventList = $cachePool->get($idCache, function (ItemInterface $item) use ($eventRepository, $page, $limit, $context,$serializer) {
             $item->tag("eventsCache");

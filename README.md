@@ -78,6 +78,10 @@ Mysql 5 or PostgreSQL > 11
 12. doc dispo à l'adresse web
     http://127.0.0.1:8000/api/doc
 
+    utiliser la route de login pour s'authentifier
+    copier le token généré, sur l'entête insérer le token après le mot clé bearer
+    ex : bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9....
+
 Contraintes :
 
 - l'accès aux évènements (CRUD) est maintenant géré par authentification, l'inscription est cependant ouvert sans authentification

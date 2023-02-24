@@ -5,22 +5,6 @@ nelmio_api_doc:
       description: API sur la gestion d'évènements + inscription des participants aux évènements
       version: 2.0.0
     components:
-      schemas:
-        Token:
-          type: object
-          properties:
-            token:
-              type: string
-              readOnly: true
-        Credentials:
-          type: object
-          properties:
-            username:
-              type: string
-              default: admin
-            password:
-              type: string
-              default: password
       securitySchemes:
         bearerAuth:
           type: apiKey
@@ -28,7 +12,39 @@ nelmio_api_doc:
           name: Authorization # or another header name
     security:
       - bearerAuth: []
+    paths:
+      /api/login_check:
+        post:
+          tags:
+            - Login
+          summary: Authentification pour avoir le token.
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  properties:
+                    username:
+                      type: string
+                    password:
+                      type: string
+                  type: object
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                      refresh_token:
+                        type: string
+            "401":
+              description: Invalid credentials
+            "400":
+              description: Invalid JSON.
+          security: []
   areas: # to filter documented areas
     path_patterns:
       - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
-

@@ -1,4 +1,8 @@
 api_platform:
+  title: "API Events"
+  description: "API gestion des inscriptions aux évènements"
+  version: "0.0.0"
+  show_webby: true
   mapping:
     paths: ["%kernel.project_dir%/src/Entity"]
   patch_formats:

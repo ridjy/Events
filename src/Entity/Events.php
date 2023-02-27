@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation\Groups;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation\Since;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @Hateoas\Relation(
@@ -46,6 +47,7 @@ use JMS\Serializer\Annotation\Since;
  */
 #[ORM\Entity(repositoryClass: EventsRepository::class)]
 #[UniqueEntity('nom')]
+#[ApiResource()]
 class Events
 {
     #[ORM\Id]

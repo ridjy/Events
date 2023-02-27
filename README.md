@@ -96,3 +96,4 @@ Contraintes :
 - reglage affichage date lors détail évènement
 
 13. apiplatform a été installé
+    http://127.0.0.1:8000/apip

@@ -92,6 +92,7 @@ Contraintes :
 
 @Todo
 
-- documentation avec Nelmio
-- refactoring et mettre en oeuvre avec APIplatform
+- refactoring
 - reglage affichage date lors détail évènement
+
+13. apiplatform a été installé
